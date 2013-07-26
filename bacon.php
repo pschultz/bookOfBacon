@@ -1,6 +1,9 @@
 <?php
 
 //TODO check parameters first
+if ($argc < 3) {
+	die("Please give me two parameters. First the file name and then the beacon offset\n");
+}
 $fileName = $argv[1];
 $offset = $argv[2];
 
@@ -66,7 +69,7 @@ for ($i=$offset+1; $i < $nrOfWords; $i++) {
 }
 
 $nrOfBeacons = count($beacons);
-logMessage("Found $nrOfBeacons number of beacons");
+logMessage("Found $nrOfBeacons beacon(s)");
 foreach ($beacons as $beacon => $firstPosition) {
 	$secretText = '';
 	for($i = $firstPosition+1; $i < $nrOfWords; $i+=$offset+1) {
