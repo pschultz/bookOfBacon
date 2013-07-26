@@ -1,6 +1,8 @@
 <?php
 
-//TODO check parameters first
+//TODO this could be calculated from the file size plus some buffer
+ini_set('memory_limit', '1024M');
+
 if ($argc < 3) {
 	die("Please give me two parameters. First the file name and then the beacon offset\n");
 }
@@ -9,6 +11,10 @@ $offset = $argv[2];
 
 function logMessage($message) {
     echo $message . PHP_EOL;
+}
+
+function getWord($index) {
+	
 }
 
 logMessage("Analyzing file {$fileName}");
