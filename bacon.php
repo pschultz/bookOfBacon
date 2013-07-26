@@ -35,6 +35,7 @@ $content = implode(' ', $lines);
 $words = explode(' ', $content);
 $nrOfWords = count($words);
 $candidates = array();
+$beacons = array();
 for ($i=$offset+1; $i < $nrOfWords; $i++) {
     $currentWord = $words[$i];
     $offsetWordBefore = $words[$i - $offset - 1];
@@ -43,9 +44,11 @@ for ($i=$offset+1; $i < $nrOfWords; $i++) {
         // we have never seen this word before
         if ($offsetWordBefore == $currentWord) {
             $candidates[$currentWord] = true;
+			$beacons[$currentWord] = $i - $offset - 1;
         }
         else {
             $candidates[$offsetWordBefore] = false;
+			unset($beacons[$offsetWordBefore]);
         }
     }
     else  {
@@ -55,17 +58,21 @@ for ($i=$offset+1; $i < $nrOfWords; $i++) {
             if ($offsetWordBefore != $currentWord) {
                 $candidates[$currentWord] = false;
                 $candidates[$offsetWordBefore] = false;
+				unset($beacons[$currentWord]);
+				unset($beacons[$offsetWordBefore]);
             }
         }
     }
 }
 
-logMessage("Collecting candidates");
-foreach ($candidates as $candidate => $isValid) {
-	if ($isValid) {
-		$realCandidates[] = $candidate;
+$nrOfBeacons = count($beacons);
+logMessage("Found $nrOfBeacons number of beacons");
+foreach ($beacons as $beacon => $firstPosition) {
+	$secretText = '';
+	for($i = $firstPosition+1; $i < $nrOfWords; $i+=$offset+1) {
+		$secretText .= " {$words[$i]}";
 	}
+	$secretText = trim($secretText);
+	logMessage("Secret text for beacon $beacon is '$secretText'");
 }
-
-var_dump($realCandidates);
 ?>
