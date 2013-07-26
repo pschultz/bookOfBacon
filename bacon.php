@@ -1,7 +1,7 @@
 <?php
 
 //TODO this could be calculated from the file size plus some buffer
-ini_set('memory_limit', '1024M');
+ini_set('memory_limit', '2048M');
 
 if ($argc < 3) {
 	die("Please give me two parameters. First the file name and then the beacon offset\n");
@@ -44,7 +44,11 @@ ksort($lines);
 
 logMessage("Extracting beacon..");
 $content = implode(' ', $lines);
+unset($lines);
+
 $words = explode(' ', $content);
+unset($content);
+
 $nrOfWords = count($words);
 $candidates = array();
 $beacons = array();
