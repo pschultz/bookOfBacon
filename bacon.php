@@ -16,19 +16,22 @@ logMessage("Beacon offset is {$offset}");
 
 logMessage("Reading file contents..");
 $lines = array();
-$handle = fopen($fileName, "r");
-if ($handle) {
-    while (($line = fgets($handle, 4096)) !== false) {
-        $parts = explode(' # ', $line);
-        $lineNumber = $parts[0];
-        $lineContent = trim($parts[1]);
-        $lines[$lineNumber] = $lineContent;
-    }
-    if (!feof($handle)) {
-        echo "Fehler: unerwarteter fgets() Fehlschlag\n";
-    }
-    fclose($handle);
+$fileHandle = fopen($fileName, 'r');
+if ($fileHandle === false) {
+	die("Could not open file" . PHP_EOL);
 }
+ 
+while (($line = fgets($fileHandle, 4096)) !== false) {
+    $parts = explode(' # ', $line);
+    $lineNumber = $parts[0];
+    $lineContent = trim($parts[1]);
+    $lines[$lineNumber] = $lineContent;
+}
+
+if (feof($fileHandle) == false) {
+    die("Error while reading file" . PHP_EOL);
+}
+fclose($fileHandle);
 
 logMessage("Sorting lines..");
 ksort($lines);
